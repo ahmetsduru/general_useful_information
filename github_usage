@@ -1,0 +1,7 @@
+git init
+git add .
+git config --global user.email "ahmetsduru@gmail.com"
+git config --global user.name "ahmetsduru"
+git commit -m "asd"
+git remote add origin https://github.com/ahmetsduru/general_useful_information.git
+git push -u origin master
