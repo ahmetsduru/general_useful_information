@@ -1,0 +1,59 @@
+1. nomachine -> resmi sitesinden indir kur.
+
+2. ONLYOFFICE
+	mkdir -p -m 700 ~/.gnupg
+	gpg --no-default-keyring --keyring gnupg-ring:/tmp/onlyoffice.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys CB2DE8E5
+	chmod 644 /tmp/onlyoffice.gpg
+	sudo chown root:root /tmp/onlyoffice.gpg
+	sudo mv /tmp/onlyoffice.gpg /usr/share/keyrings/onlyoffice.gpg
+	echo 'deb [signed-by=/usr/share/keyrings/onlyoffice.gpg] https://download.onlyoffice.com/repo/debian squeeze main' | sudo tee -a /etc/apt/sources.list.d/onlyoffice.list
+	sudo apt-get update
+	sudo apt-get install onlyoffice-desktopeditors
+	
+3. Gutenprint
+	sudo apt-get -y install printer-driver-gutenprint
+
+4. Nvidia driver
+	sudo ubuntu-drivers list
+	sudo ubuntu-drivers install (bu otomatik)
+	sudo ubuntu-drivers install nvidia:470
+	
+5. vscode
+	sudo apt-get install wget gpg
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+	sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+	sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+	sudo apt install apt-transport-https
+	sudo apt update
+	sudo apt install code # or code-insiders
+
+6. ROS Noetic -> resmi siteden kur
+
+7. Raspberry imager
+	snap install rpi-imager
+	run the program
+		choose device (sekmeden uygun olan cihaz seçilecek).
+		choose OS (other general-purpose OS den ubuntu 20.06 server 64 bit seçilecek)
+		choose storage (buradan sd kart seçilecek).
+		next dedikten sonra edit yapılacak, buradan bilgisayar ismi şifresi, açılışta hangi wifi ağına otomatik olarak bağlanılacaksa ağın ismi şifresi girilecek.
+		sd karta yüklenen OS rp ye takılacak (klavye, mouse ve monitör ile).
+		cihaz açıldıktan sonra ubuntu 20.04 server kurulumu başlayacak.
+		kurulum bittikten sonra sudo apt update ve sudo apt upgrade yapılacak.
+		Upgrade yaparken waiting for cache lock could not get lock /var/lib/dpkg/lock-frontend hatası alınacak bunun çözümü aşağıdaki kodların çalıştırılmasıyla düzelecek.
+		sudo killall apt apt-get
+		sudo rm /var/lib/apt/lists/lock
+		sudo rm /var/cache/apt/archives/lock
+		sudo rm /var/lib/dpkg/lock*
+		sudo dpkg --configure -a
+		Hata giderildikten sonra upgrade yapılacak ve ubuntu 20.04 desktop aşağıdaki kodla kurulacak.
+		sudo apt-get install ubuntu-desktop
+		ubuntu kurulumu başarıyla tamamlandıktan sonra ros noetic kurulumu yapılacak, kurulum sırasında dependencies ler eksik olduğundan hata verecek bu hatalar "sudo apt --fix-broken install" kodu ile giderilecektir.
+		
+8. ssh
+	ssh-copy-id -i ~/.ssh/id_rsa.pub hostname@ip (pubkey aktif etmek için kullanılacak)
+	whoami
+	ip a
+
+		
+		
