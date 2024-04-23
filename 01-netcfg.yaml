@@ -1,3 +1,5 @@
+sudo nano /etc/netplan/01-netcfg.yaml
+
 network:
   version: 2
   renderer: networkd
