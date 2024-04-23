@@ -55,5 +55,8 @@ rm -f packages.microsoft.gpg
 	whoami
 	ip a
 
-		
+9. crow translate
+	sudo add-apt-repository ppa:jonmagon/crow-translate
+	sudo apt update
+	sudo apt install crow-translate
 		
