@@ -1,0 +1,13 @@
+network:
+  version: 2
+  renderer: networkd
+  wifis:
+    wlan0:
+      dhcp4: true
+      dhcp6: true
+      optional: true
+      access-points:
+        "FiberHGW_TPAD18_2.4GHz":
+          password: "pkcf7hWb"
+        "asdwifi":
+          password: "12345asd"
