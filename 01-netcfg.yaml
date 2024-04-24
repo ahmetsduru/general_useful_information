@@ -10,6 +10,6 @@ network:
       optional: true
       access-points:
         "FiberHGW_TPAD18_2.4GHz":
-          password: "pkcf7hWb"
+          password: "password"
         "asdwifi":
-          password: "12345asd"
+          password: "password"
