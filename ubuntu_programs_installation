@@ -34,7 +34,7 @@ rm -f packages.microsoft.gpg
 	snap install rpi-imager
 	run the program
 		choose device (sekmeden uygun olan cihaz seçilecek).
-		choose OS (other general-purpose OS den ubuntu 20.06 server 64 bit seçilecek)
+		choose OS (other general-purpose OS den ubuntu 20.04 server 64 bit seçilecek)
 		choose storage (buradan sd kart seçilecek).
 		next dedikten sonra edit yapılacak, buradan bilgisayar ismi şifresi, açılışta hangi wifi ağına otomatik olarak bağlanılacaksa ağın ismi şifresi girilecek.
 		sd karta yüklenen OS rp ye takılacak (klavye, mouse ve monitör ile).
