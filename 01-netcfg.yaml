@@ -13,3 +13,10 @@ network:
           password: "password"
         "asdwifi":
           password: "password"
+
+
+
+daha sonra terminal üzerinden
+sudo netplan generate
+sudo netplan apply
+reboot
