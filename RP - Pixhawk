@@ -1,0 +1,5 @@
+catkin_ws/src/mavros/mavros/launch/px4.launch  dosyasının içerisinde 
+<arg name="fcu_url" default="/dev/ttyACM0:57600" /> olan yeri
+<arg name="fcu_url" default="/dev/ttyUSB0:921600" /> olarak değiştirmek gerekiyor.
+Not: dmesg | grep tail komutunu terminalde çalıştırdıktan sonra usbye bağlı port 
+ttyUSB0 olarak görünürken farklı isimlerde görünme durumuda var yukarıyı düzenlerken dikkate alınmalı.
