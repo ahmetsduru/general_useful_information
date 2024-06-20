@@ -3,3 +3,28 @@ catkin_ws/src/mavros/mavros/launch/px4.launch  dosyasının içerisinde
 <arg name="fcu_url" default="/dev/ttyUSB0:921600" /> olarak değiştirmek gerekiyor.
 Not: dmesg | grep tail komutunu terminalde çalıştırdıktan sonra usbye bağlı port 
 ttyUSB0 olarak görünürken farklı isimlerde görünme durumuda var yukarıyı düzenlerken dikkate alınmalı.
+
+
+VERİ HIZI AYARLAMA
+APM için;
+rosrun mavros mavsys rate --raw-sensors 10 --ext-status 10
+
+PX4 için;
+extras.txt de düzenlemeler yapılmalı
+
+TELEM2 veri alımını aktifleştirmek için;
+QGC e girip parametreler kısmına girip search e SR0 ve SR2 yazarak aşağıdaki düzenlemelerin yapılması lazım.
+SR0 USB den veri aktarımını gösteriyor (serial0)
+SR2 TELEM2 portundan veri aktarımını gösteriyor (serial2)
+default SR0 ayarları aşağıda verilmiştir.
+
+SR2_ADSB  0 Hz
+SR2_EXTRA1 10 Hz
+SR2_EXTRA2 10 Hz
+SR2_EXTRA3 3 Hz
+SR2_EXT_STAT 2 Hz
+SR2_PARAMS 0 Hz
+SR2_POSITION 3 Hz
+SR2_RAW_CTRL 0 Hz
+SR2_RAW_SENS 2 Hz
+SR2_RC_CHAN 2 Hz
