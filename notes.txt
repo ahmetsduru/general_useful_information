@@ -1,0 +1,141 @@
+Docker Kurulum;
+1. dockerı linkten kur; (Install using the apt repository)
+   https://docs.docker.com/engine/install/ubuntu/
+   
+2. sudo usermod -aG docker $USER
+
+3. chmod +x Desktop/docker_xorg_ros.sh
+
+4. docker pull ros:noetic-perception
+
+5. ./docker_xorg_ros.sh
+
+./docker_ros.sh dosyası (wayland için) aşağıda verilmiştir.
+
+#!/usr/bin/env sh
+docker run -it --name ros_noetic                \
+    --net=host                                  \
+    --ulimit nofile=1024:524288 \
+    -e DISPLAY=$DISPLAY \
+    --env="QT_X10_NO_MITSHM=1" \
+    -e XDG_RUNTIME_DIR=/tmp \
+    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+    -e XDG_SESSION_TYPE=wayland \
+    -e QT_QPA_PLATFORM=xcb \
+    -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY  \
+    -v /dev:/dev \
+    --device-cgroup-rule='c 166:* rmw' \
+    --device-cgroup-rule='c 188:* rmw' \
+    --device-cgroup-rule='c 81:* rmw' \
+    --device-cgroup-rule='c 226:* rmw' \
+    -v /home/quadcopter/catkin_ws:/root/catkin_ws \
+    --memory=7g \
+    --cpus=4 \
+    --cap-add=ALL \
+    ros:noetic-perception bash -it
+
+
+
+# device rules for 81 => video, kamera
+# device rules for 226 => graphic cards
+# device rules for 166 => arduino board
+# device rules for 188 => lidar, imu
+# device rules for ... => ...
+
+#   --user $(id -u):$(id -g) \  #Bu komut bugl-C�-A
+# https://stackoverflow.com/questions/78495838/problem-with-docker-image-ros-noetic-on-fedora-40
+
+
+docker_xorg_ros.sh dosyası (xorg için) aşağıda verilmiştir.
+
+#!/usr/bin/env sh
+
+docker run -it --name ros_noetic \
+    --net=host \
+    --ulimit nofile=1024:524288 \
+    -e DISPLAY=$DISPLAY \
+    -e QT_X11_NO_MITSHM=1 \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    -v /dev:/dev \
+    --device-cgroup-rule='c 166:* rmw' \
+    --device-cgroup-rule='c 188:* rmw' \
+    --device-cgroup-rule='c 81:* rmw' \
+    --device-cgroup-rule='c 226:* rmw' \
+    -v /home/quadcopter/catkin_ws:/root/catkin_ws \
+    --memory=7g \
+    --cpus=4 \
+    --cap-add=ALL \
+    ros:noetic-perception bash -it
+
+# device rules for 81 => video, kamera
+# device rules for 226 => graphic cards
+# device rules for 166 => arduino board
+# device rules for 188 => lidar, imu
+
+# X11 kullanımı için Wayland özel değişkenleri ve mount'ları kaldırıldı.
+
+
+6. docker start ros_noetic
+
+7. docker exec -it ros_noetic bash
+
+ROS Noetic Kurulum;
+8. http://wiki.ros.org/noetic/Installation/Ubuntu
+   sudo apt install ros-noetic-desktop-full  bu komuttan itibaren kur
+   
+9. source /opt/ros/noetic/setup.bash
+source ~/catkin_ws/devel/setup.bash
+
+Mavros Kurulum;
+10. sudo apt-get install ros-noetic-mavros ros-noetic-mavros-extras
+
+wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh
+
+chmod a+x install_geographiclib_datasets.sh
+./install_geographiclib_datasets.sh
+
+Apriltag Kurulum;
+11. cd ~/catkin_ws/src
+git clone https://github.com/AprilRobotics/apriltag_ros.git
+
+12. cd ~/catkin_ws
+rosdep install --from-paths src --ignore-src -r -y
+
+13. apt install ros-noetic-apriltag
+
+Apriltag Konfigürasyon;
+14. /home/quadcopter/catkin_ws/src/apriltag_ros/apriltag_ros/config dizindeki "settings.yaml" dosyasından kullanılacak tag kütüphanesi seçilir.
+
+15. /home/quadcopter/catkin_ws/src/apriltag_ros/apriltag_ros/config dizininde bulunan tags.yaml dosyasından kullanılacak taglarin ilgili özellikleri girilir.
+
+16. .ros klasörünün içine kamera kalibrasyon klasörü eklenmeli (camera_info)
+
+17. /home/quadcopter/catkin_ws/src/apriltag_ros/apriltag_ros/launch dizinde bulunan launch dosyasında bulunan aşağıdaki satırlar değiştirilir.
+
+  <arg name="camera_name" default="/usb_cam" />
+  <arg name="image_topic" default="image_raw" />
+  
+usb_cam kurulum;
+18. sudo apt update
+sudo apt install ros-noetic-usb-cam
+
+usb_cam launch dosyası;
+
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="mjpeg" />
+    <param name="color_format" value="yuv422p" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+    <param name="framerate" value="30" />
+  </node>
+  <!--
+  <node name="image_view" pkg="image_view" type="image_view" respawn="false" >
+    <remap from="image" to="/usb_cam/image_raw"/>
+    <param name="autosize" value="true" />
+  </node>
+  -->
+</launch>
